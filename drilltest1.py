@@ -4,7 +4,6 @@ import sqlite3
 
 import re
 
-global matches
 
 # conn is going to hold our connection
 conn = sqlite3.connect('drill.db')
@@ -18,23 +17,16 @@ def findMatch():
         if i.endswith('.txt'):
             matches = i
             print(matches)
+            insertData(matches)
             
 
 # insert data
 def insertData(matches):
     cur = conn.cursor()
     cur.execute("INSERT INTO tbl_file(col_dtype) VALUES (?)", \
-          (matches))
+          (matches,))
     conn.commit()
-    selectData(matches)
-
-# select from tbl for drill
-def selectData(matches):
-    cur = conn.cursor()
-    cur.execute("SELECT * FROM tbl_file")
-    myresult = cur.fetchall()
-    for myresult in myresult:
-        print(myresult)
+    
 
 
 
@@ -50,7 +42,6 @@ def createDB():
         conn.commit()
     conn.close()
     findMatch()
-    insertData(matches)
     
 
 
